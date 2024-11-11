@@ -37,7 +37,10 @@ async function compareScreenshots(img1Path, img2Path, diffPath) {
 }
 ```
 ## To get a better explaination 
-### 1. async function compareScreenshots(img1Path, img2Path, diffPath) 
+### 1. Paths and Images
+```bash
+async function compareScreenshots(img1Path, img2Path, diffPath) 
+```
 This line defines an asynchronous function named compareScreenshots. The function takes three arguments:
 
 - **img1Path**: The file path to the first image.
@@ -50,23 +53,37 @@ This line defines an asynchronous function named compareScreenshots. The functio
 
 In this case we see that the images are saved in three different folders.
 
-### 2. const pixelmatch = (await import('pixelmatch')).default;
+
+### 2. Dynamically Importing pixelmatch
+```bash
+ const pixelmatch = (await import('pixelmatch')).default;
+ ```
 **This part is optional**.
 Here, we’re using await import to load a library called pixelmatch, which compares images to find differences. By loading it dynamically, the library is only imported when the function runs, which can be helpful for optimizing performance if we don't always need it.
 
-### 3. const img1 = PNG.sync.read(fs.readFileSync(img1Path));
+### 3. Reading the First Image 
 This line reads the first image file (img1Path) from the file system and decodes it as a PNG image format.
+
+```bash
+const img1 = PNG.sync.read(fs.readFileSync(img1Path));
+```
 
 - **fs.readFileSync(img1Path)** reads the file’s data from the specified path.
 - **PNG.sync.read(...)**  decodes this data into an object we can work with in code.
  
 Here, img1 will hold this decoded data, including image details like width, height, and pixel data.
 
-### 4. const diff = new PNG({ width, height });
+### 4. Creating a Blank Image for Differences
+```bash
+ const diff = new PNG({ width, height });
+```
 This line creates a new blank image, diff, with the same width and height as img1. This diff image will hold the differences (if any) between img1 and img2.
 
-### 5. const numDiffPixels = pixelmatch(img1.data, img2.data, diff.data, width, height, { threshold: 0.1 });
+### 5. Comparing the Two Images
 This is the main comparison step. The pixelmatch function checks each pixel in img1 and img2 to find any differences. Here's what each argument means:
+```bash
+const numDiffPixels = pixelmatch(img1.data, img2.data, diff.data, width, height, { threshold: 0.1 });
+```
 
 - **img1.data**: The pixel data for the first image.
 - **img2.data**: The pixel data for the second image.
@@ -76,7 +93,10 @@ This is the main comparison step. The pixelmatch function checks each pixel in i
 
 The function returns the number of pixels that are different between the two images, storing this value in numDiffPixels.
 
-### 7. fs.writeFileSync(diffPath, PNG.sync.write(diff));
+### 6. Saving the Diff Image
+```bash
+fs.writeFileSync(diffPath, PNG.sync.write(diff));
+```
 This line writes the diff image to the file system at the specified diffPath. This means that any differences between img1 and img2 will be saved visually as a new image.
 
 You can call the function when needed and also add the path for the new image you want to test.
